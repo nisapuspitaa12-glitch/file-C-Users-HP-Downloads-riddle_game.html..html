@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Guessing Game - English Riddles</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none; /* mencegah teks terblok secara tidak sengaja */
+        }
+
+        body {
+            background: linear-gradient(145deg, #f9e7b3 0%, #f5c542 100%);
+            font-family: 'Comic Neue', 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI Emoji', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Kartu utama */
+        .game-card {
+            background-color: #fffef7;
+            border-radius: 70px 70px 80px 80px;
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255,255,255,0.6);
+            max-width: 650px;
+            width: 100%;
+            padding: 25px 30px 40px;
+            text-align: center;
+            transition: 0.3s;
+            border: 3px solid #ffb347;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: #ff9800;
+            display: inline-block;
+            padding: 0 25px;
+            border-radius: 60px;
+            color: white;
+            text-shadow: 3px 3px 0 #b45f06;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 0 #b45f06;
+        }
+
+        .riddle-box {
+            background: #eef5ff;
+            border-radius: 55px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            border: 2px dashed #ffb347;
+            box-shadow: inset 0 0 0 3px white, 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .riddle-text {
+            font-size: 1.7rem;
+            line-height: 1.4;
+            font-weight: bold;
+            color: #2c3e2f;
+            background: white;
+            padding: 20px;
+            border-radius: 50px;
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .emoji-big {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .answer-area {
+            margin: 25px 0 20px;
+        }
+
+        label {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: #ffd966;
+            padding: 5px 15px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 12px;
+            color: #3c2a1f;
+        }
+
+        input {
+            width: 85%;
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 3px solid #ffb347;
+            border-radius: 60px;
+            background: white;
+            font-family: inherit;
+            font-weight: bold;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #f57c00;
+            box-shadow: 0 0 0 3px #ffe0b3;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0 10px;
+        }
+
+        button {
+            background: #ff9f2e;
+            border: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s linear;
+            font-family: inherit;
+            box-shadow: 0 5px 0 #b45f06;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #b45f06;
+        }
+
+        .feedback {
+            background: #f4f1e0;
+            padding: 12px;
+            margin: 20px 0 0;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #3e3a2b;
+            border-left: 12px solid #ffb347;
+            text-align: center;
+        }
+
+        .score {
+            background: #2e5a2e;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: gold;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .counter {
+            font-size: 1.2rem;
+            background: #ffe0b3;
+            border-radius: 30px;
+            padding: 6px 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        footer {
+            font-size: 0.8rem;
+            margin-top: 25px;
+            color: #7b5e3b;
+        }
+
+        @media (max-width: 500px) {
+            .game-card {
+                padding: 20px;
+            }
+            .riddle-text {
+                font-size: 1.3rem;
+            }
+            button {
+                padding: 8px 20px;
+                font-size: 1.1rem;
+            }
+            input {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-card">
+    <h1>🧩 GUESSING GAME 🧩</h1>
+    <div class="riddle-box">
+        <div class="emoji-big" id="riddleEmoji">🐘</div>
+        <div class="riddle-text" id="riddleText">
+            I am an animal. I am very big. I have a long trunk. I have big ears. What am I?
+        </div>
+    </div>
+
+    <div class="answer-area">
+        <label>✏️ YOUR ANSWER :</label><br>
+        <input type="text" id="answerInput" placeholder="Type your answer here..." autocomplete="off">
+    </div>
+
+    <div class="button-group">
+        <button id="checkBtn">✅ CHECK</button>
+        <button id="nextBtn">⏩ NEXT RIDDLE</button>
+    </div>
+
+    <div class="feedback" id="feedbackMsg">
+        💡 Write your guess and click CHECK!
+    </div>
+
+    <div class="score" id="scoreDisplay">⭐ SCORE : 0</div>
+    <div class="counter" id="riddleCounter">Riddle 1 / 3</div>
+    <footer>🌟 Type the answer in English (a, an, or just the word) 🌟</footer>
+</div>
+
+<script>
+    // === DAFTAR RIDDLES (sesuai permintaan, bisa ditambah nanti) ===
+    const riddles = [
+        {
+            text: "I am an animal. I am very big. I have a long trunk. I have big ears. What am I?",
+            answer: "elephant",
+            emoji: "🐘"
+        },
+        {
+            text: "I am a thing in the classroom. I am long. I am made of wood or plastic. I write on paper. What am I?",
+            answer: "ruler",
+            emoji: "📏"
+        },
+        {
+            text: "I am a person. I help students learn. I am smart and kind. Who am I?",
+            answer: "teacher",
+            emoji: "👩‍🏫"
+        }
+    ];
+
+    // Variabel game state
+    let currentIndex = 0;      // 0,1,2
+    let score = 0;
+    let alreadyGuessedCurrent = false;  // agar tidak bisa curang double score di riddle yang sama
+
+    // Elemen DOM
+    const riddleTextEl = document.getElementById("riddleText");
+    const riddleEmojiEl = document.getElementById("riddleEmoji");
+    const answerInput = document.getElementById("answerInput");
+    const checkBtn = document.getElementById("checkBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const feedbackMsg = document.getElementById("feedbackMsg");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const riddleCounter = document.getElementById("riddleCounter");
+
+    // Fungsi update tampilan riddle
+    function loadRiddle() {
+        const current = riddles[currentIndex];
+        riddleTextEl.innerText = current.text;
+        riddleEmojiEl.innerText = current.emoji;
+        answerInput.value = "";
+        feedbackMsg.innerHTML = "💡 Write your guess and click CHECK!";
+        feedbackMsg.style.backgroundColor = "#f4f1e0";
+        feedbackMsg.style.borderLeftColor = "#ffb347";
+        alreadyGuessedCurrent = false;
+        // update counter
+        riddleCounter.innerText = `Riddle ${currentIndex+1} / ${riddles.length}`;
+        // disable next jika belum selesai? Tidak perlu, biar bebas, tapi kalau next tanpa check tidak masalah
+        // Tapi kalau user pindah tanpa menjawab, skor tidak berubah
+    }
+
+    // Fungsi cek jawaban
+    function checkAnswer() {
+        if (alreadyGuessedCurrent) {
+            feedbackMsg.innerHTML = "⚠️ You already answered this riddle! Click NEXT to continue. ⚠️";
+            feedbackMsg.style.backgroundColor = "#fff0c0";
+            feedbackMsg.style.borderLeftColor = "#ffaa33";
+            return;
+        }
+
+        let userAnswer = answerInput.value.trim().toLowerCase();
+        if (userAnswer === "") {
+            feedbackMsg.innerHTML = "❓ Please type your answer first! ❓";
+            feedbackMsg.style.backgroundColor = "#ffe0e0";
+            feedbackMsg.style.borderLeftColor = "#ff6666";
+            return;
+        }
+
+        const correctAnswer = riddles[currentIndex].answer;
+        // Perbandingan: hilangkan 'a' atau 'an' di awal jika ada, biar lebih fleksibel
+        let cleanedUser = userAnswer.replace(/^(a|an)\s+/, "").trim();
+        
+        if (cleanedUser === correctAnswer) {
+            // Jawaban benar
+            if (!alreadyGuessedCurrent) {
+                score++;
+                alreadyGuessedCurrent = true;
+                updateScore();
+                feedbackMsg.innerHTML = "🎉 CORRECT! 🎉 Great job! +1 point 🎉";
+                feedbackMsg.style.backgroundColor = "#d9ffd9";
+                feedbackMsg.style.borderLeftColor = "#2e7d32";
+            } else {
+                // sebenarnya sudah dicegah di awal, tapi safety
+                feedbackMsg.innerHTML = "✅ You already got it right! Move to next riddle.";
+            }
+        } else {
+            feedbackMsg.innerHTML = `❌ OOPS! That's not correct. Try again! (Hint: it's a ${correctAnswer}) ❌`;
+            feedbackMsg.style.backgroundColor = "#ffe0e0";
+            feedbackMsg.style.borderLeftColor = "#ff6666";
+        }
+    }
+
+    function updateScore() {
+        scoreDisplay.innerText = `⭐ SCORE : ${score}`;
+    }
+
+    function nextRiddle() {
+        if (currentIndex + 1 < riddles.length) {
+            currentIndex++;
+            loadRiddle();
+        } else {
+            // Sudah di riddle terakhir
+            if (currentIndex === riddles.length - 1) {
+                // Permainan selesai
+                feedbackMsg.innerHTML = `🏆 CONGRATULATIONS! 🏆 You finished all riddles! Final Score: ${score} / ${riddles.length} 🏆`;
+                feedbackMsg.style.backgroundColor = "#ffefc0";
+                feedbackMsg.style.borderLeftColor = "#ffaa33";
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = "0.6";
+                nextBtn.style.cursor = "default";
+                checkBtn.disabled = true;
+                checkBtn.style.opacity = "0.6";
+                answerInput.disabled = true;
+            } else {
+                // fallback
+                loadRiddle();
+            }
+        }
+    }
+
+    // Event listeners
+    checkBtn.addEventListener("click", checkAnswer);
+    nextBtn.addEventListener("click", nextRiddle);
+
+    // Biar user bisa tekan Enter di input
+    answerInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkAnswer();
+        }
+    });
+
+    // Inisialisasi pertama
+    loadRiddle();
+    updateScore();
+</script>
+</body>
+</html>
